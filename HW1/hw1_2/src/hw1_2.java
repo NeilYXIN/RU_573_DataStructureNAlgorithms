@@ -6,10 +6,14 @@ public class hw1_2 {
     public static void main(String[] args) throws IOException {
         DataLoader dataLoader = new DataLoader();
         String filepath = "/Users/yx960203/Desktop/Code/DSA/HW1/hw1-2.data/";
-        String filename = "8192pair.txt";
+        String filename = "8pair.txt";
         List<List<Integer>> data = null;
-        List<Integer> p = null;
-        List<Integer> q = null;
+        List<Integer> p1 = null;
+        List<Integer> q1 = null;
+        List<Integer> p2 = null;
+        List<Integer> q2 = null;
+        List<Integer> p3 = null;
+        List<Integer> q3 = null;
         if(args.length == 0)
         {
             data = dataLoader.loadData(filepath + filename);
@@ -18,17 +22,21 @@ public class hw1_2 {
         {
             data = dataLoader.loadData(args[0]);
         }
-        p = data.get(0);
-        q = data.get(1);
-        int len = p.size();
+        p1 = data.get(0);
+        q1 = data.get(1);
+        p2 = data.get(0);
+        q2 = data.get(1);
+        p3 = data.get(0);
+        q3 = data.get(1);
+        int len = p1.size();
 
         // QuickFind
         Long qfStartTime = System.currentTimeMillis();
         QuickFindUF qf = new QuickFindUF(8192);
         for(int i = 0; i < len; i++)
         {
-            if(!qf.connected(p.get(i), q.get(i)))
-                qf.union(p.get(i), q.get(i));
+            if(!qf.connected(p1.get(i), q1.get(i)))
+                qf.union(p1.get(i), q1.get(i));
         }
         Long qfStopTime = System.currentTimeMillis();
         Long qfduration = qfStopTime - qfStartTime;
@@ -40,8 +48,8 @@ public class hw1_2 {
         QuickUnionUF qu = new QuickUnionUF(8192);
         for(int i = 0; i < len; i++)
         {
-            if(!qu.connected(p.get(i), q.get(i)))
-                qu.union(p.get(i), q.get(i));
+            if(!qu.connected(p2.get(i), q2.get(i)))
+                qu.union(p2.get(i), q2.get(i));
         }
         Long quStopTime = System.currentTimeMillis();
         Long quduration = quStopTime - quStartTime;
@@ -53,8 +61,8 @@ public class hw1_2 {
         WeightedUnionUF wu = new WeightedUnionUF(8192);
         for(int i = 0; i < len; i++)
         {
-            if(!wu.connected(p.get(i), q.get(i)))
-                wu.union(p.get(i), q.get(i));
+            if(!wu.connected(p3.get(i), q3.get(i)))
+                wu.union(p3.get(i), q3.get(i));
         }
         Long wuStopTime = System.currentTimeMillis();
         Long wuduration = wuStopTime - wuStartTime;
