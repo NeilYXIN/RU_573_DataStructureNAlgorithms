@@ -9,8 +9,8 @@ public class hw2_2 {
         DataLoader dataLoader = new DataLoader();
         // load data
         String filepath = "/Users/yx960203/Desktop/Code/DSA/HW2/dataset-problem2-hw2/";
-        String filename1 = "data0.1";
-        String filename2 = "data1.1";
+        String filename1 = "data0.2048";
+        String filename2 = "data1.2048";
 
 
         List<Integer> nums0 = null;
