@@ -9,6 +9,7 @@ public class MergeSortWithInsertion {
 
         if ((hi - lo) < CUTOFF) {
             is.insertionSort(nums, lo, hi);
+            count+=is.getCount();
         }
         else {
             mergeSortWithInsertion(nums, temp, lo, mid);
@@ -27,7 +28,6 @@ public class MergeSortWithInsertion {
         }
 
         for (int k = lo; k <= hi; k++) {
-            count ++;
             if(i > mid) {
                 nums.set(k, temp.get(j++));
             }
@@ -36,14 +36,17 @@ public class MergeSortWithInsertion {
             }
             else if(temp.get(j) < temp.get(i)) {
                 nums.set(k, temp.get(j++));
+                count++;
             }
             else {
                 nums.set(k, temp.get(i++));
+                count++;
             }
         }
-        count++;
     }
 
-
+    public void setCUTOFF(int i) {
+        CUTOFF = i;
+    }
 
 }

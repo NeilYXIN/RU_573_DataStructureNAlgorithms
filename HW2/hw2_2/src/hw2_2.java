@@ -9,20 +9,36 @@ public class hw2_2 {
         DataLoader dataLoader = new DataLoader();
         // load data
         String filepath = "/Users/yx960203/Desktop/Code/DSA/HW2/dataset-problem2-hw2/";
-        String filename1 = "data0.2048";
-        String filename2 = "data1.2048";
-
+        String filename1 = "data0.1024";
+        String filename2 = "data1.1024";
 
         List<Integer> nums0 = null;
         List<Integer> nums1 = null;
 
         nums0 = dataLoader.loadData(filepath + filename1);
         nums1 = dataLoader.loadData(filepath + filename2);
+        if(args.length == 0)
+        {
+            nums0 = dataLoader.loadData(filepath + filename1);
+            nums1 = dataLoader.loadData(filepath + filename2);
 
-        FindDistance fd = new FindDistance();
-        fd.findDistance(nums0, nums1);
+        }
+        else if (args.length == 2)
+        {
+            nums0 = dataLoader.loadData(args[0]);
+            nums1 = dataLoader.loadData(args[1]);
 
+        }
+        else {
+            System.out.println("Invalid argumenrs!");
+        }
 
+        long startTime = System.currentTimeMillis();
+        KendallTauDistance ktd = new KendallTauDistance();
+        ktd.kendallTauDistance(nums0, nums1);
+        long stopTime = System.currentTimeMillis();
+
+        System.out.println("Time duration: " + (stopTime - startTime));
 
     }
 }

@@ -19,7 +19,6 @@ public class InsertionSort {
             }
             count++;
 
-
         }
         System.out.println("Comparisons in Insertion Sort: " + count);
         int flag = 0;

@@ -8,7 +8,7 @@ public class hw2_1 {
     public static void main(String[] args) throws IOException {
         DataLoader dataLoader = new DataLoader();
         // load data
-        String filepath = "/Users/xinyang/Desktop/Code/DSA/HW1/hw1-1.data/";
+        String filepath = "/Users/yx960203/Desktop/Code/DSA/HW1/hw1-1.data/";
         String filename = "8192int.txt";
         List<Integer> nums = null;
         if(args.length == 0)

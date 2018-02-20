@@ -10,7 +10,6 @@ public class BottomUpMergeSort {
                 merge(nums, temp, lo, lo + i - 1, Math.min(lo + i + i - 1, len - 1));
             }
         }
-
     }
 
     public void merge(List<Integer> nums, List<Integer> temp, int lo, int mid, int hi) {
@@ -21,7 +20,6 @@ public class BottomUpMergeSort {
         }
 
         for (int k = lo; k <= hi; k++) {
-            count ++;
             if(i > mid) {
                 nums.set(k, temp.get(j++));
             }
@@ -30,11 +28,12 @@ public class BottomUpMergeSort {
             }
             else if(temp.get(j) < temp.get(i)) {
                 nums.set(k, temp.get(j++));
+                count ++;
             }
             else {
                 nums.set(k, temp.get(i++));
+                count ++;
             }
         }
-        count++;
     }
 }

@@ -2,7 +2,7 @@ public class hw2_3 {
 
     public static void main(String[] args) {
         int data[];
-        // generate data
+        // generate data separated randomly
         DataGenerator dg = new DataGenerator();
         data = dg.generate();
         int len = data.length;
@@ -49,6 +49,10 @@ public class hw2_3 {
             data[i] = 1111;
         }
 
+
+        for (int i = 0; i < data.length; i++) {
+            System.out.println(data[i]);
+        }
 
         // Verify sorted array
         /*

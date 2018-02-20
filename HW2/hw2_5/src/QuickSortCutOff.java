@@ -1,11 +1,17 @@
 import java.util.List;
 
-public class QuickSort {
+public class QuickSortCutOff {
     public int count = 0;
+    int CUTOFF = 9;
     public void quickSort(List<Integer> nums, int lo, int hi){
-        if (lo >= hi)
+        if (lo + CUTOFF >= hi) {
+            InsertionSort is = new InsertionSort();
+            is.insertionSort(nums, lo, hi);
+            count+=is.getCount();
             return;
-        if (lo < hi) {
+        }
+
+        else if (lo < hi) {
             medianOfThree(nums, lo, hi);
             int pivotIndex = hi - 1;
 
@@ -60,6 +66,10 @@ public class QuickSort {
         int temp = nums.get(i);
         nums.set(i, nums.get(j));
         nums.set(j, temp);
+    }
+
+    public void setCUTOFF(int i) {
+        CUTOFF = i;
     }
 
 
