@@ -110,29 +110,29 @@ public class TwoThreeTree<T extends Comparable<T>> {
         // assert get(h, key) != null;
 
         if (key.compareTo(parent.key) < 0)  {
-            if (!isRed(parent.left) && !isRed(parent.left.left)) {
+            if (parent.left.color == BLACK && parent.left.left.color == BLACK) {
                 parent = moveRedLeft(parent);
             }
             parent.left = delete(parent.left, key);
         }
         else {
-            if (isRed(h.left))
-                h = rotateRight(h);
-            if (key.compareTo(h.key) == 0 && (h.right == null))
+            if (parent.left.color == RED)
+                parent = rotateRight(parent);
+            if (key.compareTo(parent.key) == 0 && (parent.right == null))
                 return null;
-            if (!isRed(h.right) && !isRed(h.right.left))
-                h = moveRedRight(h);
-            if (key.compareTo(h.key) == 0) {
-                TreeNode<T> x = min(h.right);
-                h.key = x.key;
-                h.val = x.val;
+            if (parent.right.color == BLACK && parent.right.left.color == BLACK)
+                parent = moveRedRight(parent);
+            if (key.compareTo(parent.key) == 0) {
+                TreeNode<T> x = min(parent.right);
+                parent.key = x.key;
+                parent.val = x.val;
                 // h.val = get(h.right, min(h.right).key);
                 // h.key = min(h.right).key;
-                h.right = deleteMin(h.right);
+                parent.right = deleteMin(parent.right);
             }
-            else h.right = delete(h.right, key);
+            else parent.right = delete(parent.right, key);
         }
-        return balance(h);
+        return balance(parent);
     }
 
 
