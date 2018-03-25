@@ -29,9 +29,7 @@
 
 package edu.princeton.cs.algs4;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
 
@@ -46,8 +44,8 @@ import java.util.*;
  *  A symbol table implements the <em>associative array</em> abstraction:
  *  when associating a value with a key that is already in the symbol table,
  *  the convention is to replace the old value with the new value.
- *  Unlike {@link Map}, this class uses the convention that
- *  values cannot be {@code null}&mdash;setting the
+ *  Unlike {@link java.util.Map}, this class uses the convention that
+ *  values cannot be {@code null}—setting the
  *  value associated with a key to {@code null} is equivalent to deleting the key
  *  from the symbol table.
  *  <p>
@@ -603,7 +601,7 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> {
 
     // add the keys between lo and hi in the subtree rooted at x
     // to the queue
-    private void keys(Node x, Queue<Key> queue, Key lo, Key hi) {
+    private void keys(Node x, Queue<Key> queue, Key lo, Key hi) { 
         if (x == null) return; 
         int cmplo = lo.compareTo(x.key); 
         int cmphi = hi.compareTo(x.key); 
@@ -707,24 +705,25 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> {
     } 
 
 
-    public double[] countColor(Node node, double[] colorCount) {
-        if (node == null) {
-            return colorCount;
-        }
-        if (node.color == RED) {
-            colorCount[0]++;
-        }
-        else if (node.color == BLACK) {
-            colorCount[1]++;
+    public double dfs(Node node, int currentDepth, double internalLength) {
+        //System.out.println(node.key);
+        internalLength+=currentDepth; // update total path length
+
+        if (node.left == null && node.right == null) {
+            //helper[0]++; // number of paths
+            //System.out.println("d" + helper[0] +" " + currentDepth);
+            return internalLength;
         }
         else {
-            System.out.println("Illegal Color");
-            return colorCount;
+            currentDepth++;
+            if (node.left != null) {
+                internalLength = dfs(node.left, currentDepth, internalLength);
+            }
+            if (node.right != null) {
+                internalLength = dfs(node.right, currentDepth, internalLength);
+            }
+            return internalLength;
         }
-        colorCount = countColor(node.left, colorCount);
-        colorCount = countColor(node.right, colorCount);
-
-        return colorCount;
     }
 
 
@@ -734,34 +733,81 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> {
      * @param args the command-line arguments
      */
     public static void main(String[] args) throws IOException {
-        RedBlackBST<String, Integer> st = new RedBlackBST<String, Integer>();
+        FileWriter writer = new FileWriter("./Output.txt");
 
-        String filepath = "./select-data.txt";
-        File file = new File(filepath);
-        BufferedReader br = new BufferedReader(new FileReader(file));
-        String s = null;
-        int i = 0;
-        while((s = br.readLine()) != null && i < 10000)
-        {
-            st.put(s, i);
-            i++;
-            double[] colorCount = new double[]{0, 0};
-            colorCount = st.countColor(st.root, colorCount);
-            System.out.println("Red: " + colorCount[0] + " Black: " + colorCount[1] + " Percentage: " + String.format("%.4f", colorCount[0]/(colorCount[0] + colorCount[1])));
+        // N ranges from 1 to 10000
+        double[] avgDeviation = new double[10000];
+        double[] stdDeviation = new double[10000];
+
+        for (int N = 1; N <= 10000; N++) {
+            List<Integer> dataset = new ArrayList<>();
+            for (int i = 0; i < N; i++) {
+                dataset.add(i);
+            }
+            double[] tempRes = new double[1000];
+            // i stands for the number of trials of each size
+
+            //double totalLength = 0; // calculate total length during process
+
+            for (int i = 0; i < 1000; i++) {
+                Collections.shuffle(dataset);
+                RedBlackBST<Integer, Integer> st = new RedBlackBST<Integer, Integer>();
+
+
+                for (int j = 0; j < N; j++) {
+                    st.put(dataset.get(j), dataset.get(j));
+                }
+
+                /*
+                for (Integer s : st.keys())
+                    System.out.println(s + " " + st.get(s));
+                System.out.println();
+                */
+
+                // TODO: calculate the average path length of a random node
+                double internalLength = 0;
+                if (st.root != null) {
+                    internalLength = st.dfs(st.root, 1, internalLength);
+                    //System.out.println("Internal Path Length: " + N + " " + i + " " + internalLength/N);
+                    tempRes[i] = internalLength/N;
+                }
+
+            }
+            // calculate average path length
+            double totalLength = 0;
+            for (int i = 0; i < 1000; i++) {
+                totalLength += tempRes[i];
+            }
+            double averageLength = totalLength/1000;
+            //System.out.println(N + " AVG path length: " + averageLength);
+            // TODO: calculate result of a single N and write into file
+            double avgDeviationSum = 0;
+            for (int i = 0; i < 1000; i++) {
+                avgDeviationSum += Math.abs(tempRes[i] - averageLength);
+            }
+
+            // Average Deviation
+            avgDeviation[N - 1] = avgDeviationSum/1000;
+            //System.out.println(N + " AVG Deviation: " + avgDeviation[N - 1]);
+
+            // Standard Deviation
+            double stdDeviationSum = 0;
+            for (int i = 0; i < 1000; i++) {
+                stdDeviationSum += (tempRes[i] - averageLength)*(tempRes[i] - averageLength);
+            }
+            stdDeviation[N - 1] = Math.sqrt(stdDeviationSum / 999);
+            //System.out.println(N + " STD Deviation: " + stdDeviation[N - 1]);
+
+            System.out.println(N);
+            writer.write(String.valueOf(N) + " " + String.valueOf(avgDeviation[N - 1]) + " " + String.valueOf(stdDeviation[N - 1]) + "\r");
+
 
         }
 
-        /*
-        for (int i = 0; !StdIn.isEmpty(); i++) {
-            String key = StdIn.readString();
-            st.put(key, i);
-        }
-        */
 
-        for (String e : st.keys()) {
-            System.out.println(e + " " + st.get(e));
-        }
-        System.out.println();
+        writer.close();
+
+
 
 
     }

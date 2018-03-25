@@ -29,7 +29,9 @@
 
 package edu.princeton.cs.algs4;
 
+import java.util.LinkedList;
 import java.util.NoSuchElementException;
+import java.util.Queue;
 
 /**
  *  The {@code BST} class represents an ordered symbol table of generic
@@ -572,7 +574,7 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> {
      * @return all keys in the symbol table as an {@code Iterable}
      */
     public Iterable<Key> keys() {
-        if (isEmpty()) return new Queue<Key>();
+        if (isEmpty()) return new LinkedList<Key>();
         return keys(min(), max());
     }
 
@@ -591,7 +593,7 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> {
         if (lo == null) throw new IllegalArgumentException("first argument to keys() is null");
         if (hi == null) throw new IllegalArgumentException("second argument to keys() is null");
 
-        Queue<Key> queue = new Queue<Key>();
+        Queue<Key> queue = new LinkedList<Key>();
         // if (isEmpty() || lo.compareTo(hi) > 0) return queue;
         keys(root, queue, lo, hi);
         return queue;
@@ -604,7 +606,7 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> {
         int cmplo = lo.compareTo(x.key); 
         int cmphi = hi.compareTo(x.key); 
         if (cmplo < 0) keys(x.left, queue, lo, hi); 
-        if (cmplo <= 0 && cmphi >= 0) queue.enqueue(x.key); 
+        if (cmplo <= 0 && cmphi >= 0) queue.add(x.key);
         if (cmphi > 0) keys(x.right, queue, lo, hi); 
     } 
 
@@ -632,11 +634,11 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> {
     *  Check integrity of red-black tree data structure.
     ***************************************************************************/
     private boolean check() {
-        if (!isBST())            StdOut.println("Not in symmetric order");
-        if (!isSizeConsistent()) StdOut.println("Subtree counts not consistent");
-        if (!isRankConsistent()) StdOut.println("Ranks not consistent");
-        if (!is23())             StdOut.println("Not a 2-3 tree");
-        if (!isBalanced())       StdOut.println("Not balanced");
+        if (!isBST())            System.out.println("Not in symmetric order");
+        if (!isSizeConsistent()) System.out.println("Subtree counts not consistent");
+        if (!isRankConsistent()) System.out.println("Ranks not consistent");
+        if (!is23())             System.out.println("Not a 2-3 tree");
+        if (!isBalanced())       System.out.println("Not balanced");
         return isBST() && isSizeConsistent() && isRankConsistent() && is23() && isBalanced();
     }
 
@@ -703,6 +705,28 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> {
     } 
 
 
+    public double[] dfs(Node node, int currentDepth, double[] helper) {
+        System.out.println(node.key);
+        if (node.left == null && node.right == null) {
+            helper[0]++; // number of paths
+            helper[1]+=currentDepth; // update total path length
+            System.out.println("d" + helper[0] +" " + currentDepth);
+
+            return helper;
+        }
+        else {
+            currentDepth++;
+            if (node.left != null) {
+                helper = dfs(node.left, currentDepth, helper);
+            }
+            if (node.right != null) {
+                helper = dfs(node.right, currentDepth, helper);
+            }
+            return helper;
+        }
+    }
+
+
     /**
      * Unit tests the {@code RedBlackBST} data type.
      *
@@ -710,13 +734,47 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> {
      */
     public static void main(String[] args) { 
         RedBlackBST<String, Integer> st = new RedBlackBST<String, Integer>();
-        for (int i = 0; !StdIn.isEmpty(); i++) {
-            String key = StdIn.readString();
-            st.put(key, i);
+
+        // N-sorted Insertions
+        int totalPath = 0;
+        int path = 0;
+
+        String data = "ABCDEFGHIJKLMNO";
+        for (int i = 0; i < 14; i++) {
+            //String key = StdIn.readString();
+            st.put(String.valueOf(data.charAt(i)), i);
         }
         for (String s : st.keys())
-            StdOut.println(s + " " + st.get(s));
-        StdOut.println();
+            System.out.println(s + " " + st.get(s));
+        System.out.println();
+
+        double[] helper = new double[]{0, 0};
+
+        if (st.root != null) {
+            helper = st.dfs(st.root, 1, helper);
+            System.out.println("Average Path Length - Sorted Insertion: " + helper[1]/helper[0] + " " + helper[0] + " "+ helper[1]);
+        }
+
+        // N-Random Insertions
+        totalPath = 0;
+        path = 0;
+
+        String data1 = "CDAKFOHJIBEMLNG";
+        for (int i = 0; i < 14; i++) {
+            //String key = StdIn.readString();
+            st.put(String.valueOf(data1.charAt(i)), i);
+        }
+        for (String s : st.keys())
+            System.out.println(s + " " + st.get(s));
+        System.out.println();
+
+        helper[0] = 0;
+        helper[1] = 0;
+
+        if (st.root != null) {
+            helper = st.dfs(st.root, 1, helper);
+            System.out.println("Average Path Length - Random Insertion: " + helper[1]/helper[0] + " " + helper[0] + " "+ helper[1]);
+        }
     }
 }
 
