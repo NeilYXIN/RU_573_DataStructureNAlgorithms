@@ -10,7 +10,7 @@ public class hw4_5 {
         //System.out.println( String.valueOf(data.get(0).get(0))   + " " + String.valueOf(data.get(1).get(0))   + " " + String.valueOf(data.get(2).get(2))   + " ");
         //System.out.println(G.adj(0));
 
-        // DepthFirstSearch dfs = new DepthFirstSearch(G, 0);
+        DepthFirstSearch dfs = new DepthFirstSearch(G, 0);
 
         BreadthFirstSearch bfs = new BreadthFirstSearch(G, 0);
 

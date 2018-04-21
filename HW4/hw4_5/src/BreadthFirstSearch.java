@@ -7,13 +7,14 @@ public class BreadthFirstSearch {
         Queue<Integer> q = new LinkedList<>();
         q.add(s);
         visited[s] = true;
+        int count = 1;
         while (!q.isEmpty()) {
             int v = q.poll();
             for (Edge e: G.adj(v)) {
                 if (!visited[e.other(v)]) {
                     q.add(e.other(v));
                     visited[e.other(v)] = true;
-                    System.out.println("BFS Visited: " + e.other(v));
+                    System.out.println(++count + " BFS Visited: " + e.other(v));
                 }
             }
         }

@@ -1,3 +1,5 @@
+import java.util.Iterator;
+import java.util.Stack;
 
 public class DepthFirstSearch {
 
@@ -6,19 +8,28 @@ public class DepthFirstSearch {
 
     public DepthFirstSearch(EdgeWeightedGraph G, int s) {
         visited = new boolean[G.V()];
-        dfs(G, s);
-    }
 
-    public void dfs(EdgeWeightedGraph G, int v) {
-        count++;
-        visited[v] = true;
-        System.out.println(count + " Visited: " + v);
+        int count = 0;
+        Stack<Integer> stack = new Stack<Integer>();
+        stack.push(s);
+        visited[s] = true;
+        while (!stack.empty()) {
+            int v = stack.pop();
+            System.out.println(++count + " DFS Visited: " + v);
 
-        for (Edge e: G.adj(v)) {
-            if (!visited[e.other(v)]) {
-                dfs(G, e.other(v));
+            for (Edge e : G.adj(v)) {
+                int w = e.other(v);
+                if (!visited[w]) {
+                    //dfsEdgeTo[w] = v;
+                    stack.push(w);
+                    visited[w] = true;
+
+                }
             }
         }
     }
+
+
+
 
 }

@@ -22,7 +22,7 @@ public class Prim {
             }
         }
 
-        System.out.println(weight());
+        System.out.println("Prim total weight: " + weight());
     }
 
     public Iterable<Edge> edges() {

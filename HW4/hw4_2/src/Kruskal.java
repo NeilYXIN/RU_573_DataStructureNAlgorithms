@@ -29,10 +29,10 @@ public class Kruskal {
         }
 
         for (Edge e: mst) {
-            System.out.println(e.either() + " " + e.other(e.either()) + " " + e.getWeight());
+            //System.out.println(e.either() + " " + e.other(e.either()) + " " + e.getWeight());
         }
         System.out.println();
-        System.out.println("Total weight: " + weight);
+        System.out.println("Kruskal total weight: " + weight);
     }
 
 
