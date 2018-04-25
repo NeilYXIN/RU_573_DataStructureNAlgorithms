@@ -1,14 +1,14 @@
 import java.util.Stack;
 
-public class EdgeWeightedDigraphCycle {
+public class EdgeWeightedGraphCycle {
     private boolean[] visited;
-    private DirectedEdge[] edgeTo;
+    private Edge[] edgeTo;
     private boolean[] onStack;
-    private Stack<DirectedEdge> cycle;
+    private Stack<Edge> cycle;
 
-    public EdgeWeightedDigraphCycle(EdgeWeightedDigraph G) {
+    public EdgeWeightedGraphCycle(EdgeWeightedGraph G) {
         visited = new boolean[G.V()];
-        edgeTo = new DirectedEdge[G.V()];
+        edgeTo = new Edge[G.V()];
         onStack = new boolean[G.V()];
 
         for (int v = 0; v  < G.V(); v++) {
@@ -25,11 +25,11 @@ public class EdgeWeightedDigraphCycle {
         }
     }
 
-    public void dfs(EdgeWeightedDigraph G, int v) {
+    public void dfs(EdgeWeightedGraph G, int v) {
         onStack[v] = true;
         visited[v] = true;
-        for (DirectedEdge e: G.adj(v)) {
-            int w = e.to();
+        for (Edge e: G.adj(v)) {
+            int w = e.other(v);
             if (cycle != null) {
                 return;
             }
@@ -40,10 +40,10 @@ public class EdgeWeightedDigraphCycle {
             }
             else if (onStack[w]){
                 cycle = new Stack<>();
-                DirectedEdge f = e;
-                while (f.from() != w) {
+                Edge f = e;
+                while (f.either() != w) {
                     cycle.push(f);
-                    f = edgeTo[f.from()];
+                    f = edgeTo[f.either()];
                 }
                 cycle.push(f);
                 return;
